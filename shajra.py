@@ -96,4 +96,5 @@ if __name__ == "__main__":
     # T.display_vertical(f40)
     # T.display_horizontal(f40)
     T.complete_traversal(f1)
+    print('\n\n')
 
