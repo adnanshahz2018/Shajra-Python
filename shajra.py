@@ -22,7 +22,6 @@ class Node:
     def get_child(self):
         return self.__child
 
-ALPHA_NODE = Node('Deen', None)
 
 class tree:
     space_length = 0
@@ -38,7 +37,7 @@ class tree:
 
     def add_new_node(self, name, parent):
         node = None
-        print('\n PARENT === ', parent.get_name())
+        # print('\n PARENT === ', parent.get_name())
         if parent is None:
             print('Parent is None aganist -> ', name)
         else:
@@ -92,10 +91,8 @@ class tree:
                     self.traverse(child)
                 self.space_length -= 1
 
-
     def search_desired_node(self, name, node):
         if node is None:
-            print('\nsearch node in none \n')
             return
         elif node.get_name() == name:
             self.desired_node = node
@@ -130,43 +127,25 @@ def save_data(node):
                 save_data(child)
 
 
+ALPHA_NODE = Node('Deen', None)
+
 if __name__ == "__main__":
     print('\tShajra Python Application\n')
-    f1 = ALPHA_NODE
-    T = tree()
 
+    T = tree()
     with open('shajra.txt', 'r') as f:
         f.readline()
-        lines = f.readlines()
+        lines = f.read().split('\n')
         for line in lines:
-            names = line.split(',')
-            T.add_by_name(names[0], names[1])
-            print(names[0], ' -- ',  names[1])
+            if line:
+                names = line.split(',')
+                T.add_by_name(names[0], names[1])
 
-
-    # f2 = T.add_new_node('Akbar', f1) 
-    # f20 = T.add_new_node('Bashir', f1) 
-    
-    # f3 = T.add_new_node('Ihsan', f2) 
-
-    # f31 = T.add_new_node('Inam', f2) 
-    # f310 = T.add_new_node('Shahzeb', f31) 
-    # f311 = T.add_new_node('Danial', f31) 
-    # f312 = T.add_new_node('Ali', f31) 
-
-    # f32 = T.add_new_node('Anwar', f2) 
-    # f320 = T.add_new_node('Jazib', f32) 
-    
-    # f40 = T.add_new_node('Rizwan', f3)
-    # f41 = T.add_new_node('Adnan', f3) 
-    # f42 = T.add_new_node('Anzil', f3) 
-
-    name = 'Adnan'
-
+    name = 'Akbar'
     # T.display_vertical(name)
     # T.display_horizontal(name)
 
-    # T.complete_traversal(name)
+    T.complete_traversal(name)
 
     # save_family_tree_data_in_text_file()
     print('\n')
