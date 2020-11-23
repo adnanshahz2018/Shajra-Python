@@ -10,4 +10,4 @@ Danial,Inam
 Ali,Inam
 Anwar,Akbar
 Jazib,Anwar
-Bashir,Deen 
+Bashir,Deen
