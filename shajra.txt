@@ -1,0 +1,13 @@
+Deen,None
+Akbar,Deen
+Ihsan,Akbar
+Rizwan,Ihsan
+Adnan,Ihsan
+Anzil,Ihsan
+Inam,Akbar
+Shahzeb,Inam
+Danial,Inam
+Ali,Inam
+Anwar,Akbar
+Jazib,Anwar
+Bashir,Deen 
