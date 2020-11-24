@@ -109,13 +109,15 @@ class tree:
 
 
 def save_family_tree_data_in_text_file():
+    with open('shajra.txt', 'w+') as f:
+        pass
     save_data(ALPHA_NODE)
    
 def save_data(node):
     if node is None:
         return
     else:
-        with open('shajra.txt', 'a+') as f:
+        with open('shajra.txt', 'a') as f:
             if node.get_parent() is not None:
                 f.write(node.get_name() + ',' + node.get_parent().get_name() + '\n')
             else:    
@@ -126,27 +128,60 @@ def save_data(node):
             for child in node.get_child():
                 save_data(child)
 
+def intialize_tree(T):
+    try:
+        with open('shajra.txt', 'r') as f:
+            f.readline()
+            lines = f.read().split('\n')
+            for line in lines:
+                if line:
+                    names = line.split(',')
+                    T.add_by_name(names[0], names[1])
+    except Exception:
+        with open('shajra.txt', 'w+') as f:
+            pass
+
+def options():
+    print('\n')
+    print('[1] Add New Member   [name,parent]')
+    print('[2] Display Vertical [name]')
+    print('[3] Display Siblings [name]')
+    print('[4] Display Tree     [name]')
+    print('[5] Save Family Tree \n')
+
+def handle_user_input(T):
+    options()
+    user_input = int(input('Enter Option Number: '))
+    while True:
+        if user_input == 1:
+            name = input('\nEnter Member Name: ')
+            parent = input('\nEnter Parent Name: ')
+            T.add_by_name(name, parent)
+        elif user_input == 2:
+            name = input('\nEnter Member Name: ')
+            T.display_vertical(name)
+        elif user_input == 3:
+            name = input('\nEnter Member Name: ')
+            T.display_horizontal(name)
+        elif user_input == 4:
+            name = input('\nEnter Member Name: ')
+            T.complete_traversal(name)
+        elif user_input == 5:
+            save_family_tree_data_in_text_file()
+            print('\nSaved in TEXT File\n')
+        else:
+            options()
+        user_input = int(input('\nEnter Option Number: '))
+        
 
 ALPHA_NODE = Node('Deen', None)
 
 if __name__ == "__main__":
-    print('\tShajra Python Application\n')
+    print("\nShajra Console Application\n")
+    print("__________________________\n")
 
     T = tree()
-    with open('shajra.txt', 'r') as f:
-        f.readline()
-        lines = f.read().split('\n')
-        for line in lines:
-            if line:
-                names = line.split(',')
-                T.add_by_name(names[0], names[1])
-
-    name = 'Akbar'
-    # T.display_vertical(name)
-    # T.display_horizontal(name)
-
-    T.complete_traversal(name)
-
-    # save_family_tree_data_in_text_file()
+    intialize_tree(T)
+    handle_user_input(T)
     print('\n')
 
