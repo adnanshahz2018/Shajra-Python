@@ -1,5 +1,5 @@
 #   Shajra Application 
- 
+import tkinter as tk
 
 class Node:
     def __init__(self, name, parent):
@@ -8,9 +8,6 @@ class Node:
         self.__child = []
 
     def update_child(self, child_node):
-        # print('\nChild Name = ', child_node.get_name())
-        # print('Parent Name = ', child_node.get_parent().get_name())
-        # print('# of Childs = ', len(self.__child))
         self.__child.append(child_node)
 
     def get_name(self):
@@ -24,11 +21,20 @@ class Node:
 
 
 class tree:
+    window = None
+    canvas_row = 0
     space_length = 0
     desired_node = None
+
+    def __init__(self):
+        pass
     
     def set_desired_node(self):
         self.desired_node = None
+    
+    def createLabel(self, row, col, text_value):
+        label = tk.Label(self.window, text=text_value)
+        label.grid(row=row, column=col)
     
     def add_by_name(self, name, parent_name):
         self.set_desired_node()
@@ -37,7 +43,6 @@ class tree:
 
     def add_new_node(self, name, parent):
         node = None
-        # print('\n PARENT === ', parent.get_name())
         if parent is None:
             print('Parent is None aganist -> ', name)
         else:
@@ -46,14 +51,25 @@ class tree:
         return node
     
     def display_vertical(self, name):
+        self.window = tk.Tk()
+        self.window.geometry('400x600')
+        
         self.set_desired_node()
         self.search_desired_node(name, ALPHA_NODE)
         self.vertical_display(self.desired_node)
         
+        self.window.geometry('400x400')
+        self.window.mainloop()
+        
     def vertical_display(self, node):    
-        if node is None:
+        if node is None:    
             return
         self.vertical_display(node.get_parent())
+        # GUI Component
+        self.createLabel(self.canvas_row, 1, node.get_name())
+        self.createLabel(self.canvas_row + 1, 1, '  |  ')
+        self.canvas_row += 2
+
         print(node.get_name())
         print('  |  ')
 
@@ -72,20 +88,36 @@ class tree:
                 print (child.get_name(), ' | ', end="")
 
     def complete_traversal(self, name):
+        self.window = tk.Tk()
+        self.window.geometry('400x600')
+        
         self.set_desired_node()
         self.search_desired_node(name, ALPHA_NODE)
         self.traverse(self.desired_node)
+
+        self.window.mainloop()
 
     def traverse(self, node):
         if node is None:
             return
         else:
             if len(node.get_child()) == 0:
+                # GUI Component
+                self.format_gui_tree()
+                self.createLabel(self.canvas_row, self.space_length, node.get_name())
+                self.canvas_row += 1
+
                 self.format_tree()
                 print(node.get_name())
             else:
+                 # GUI Component
+                self.format_gui_tree()
+                self.createLabel(self.canvas_row, self.space_length, node.get_name())                
+                self.canvas_row += 1
+
                 self.format_tree()
                 print(node.get_name())
+
                 self.space_length += 1
                 for child in node.get_child():
                     self.traverse(child)
@@ -106,6 +138,11 @@ class tree:
     def format_tree(self):
         for i in range(self.space_length):  
             print('  |', end="")
+
+    def format_gui_tree(self):
+        string = '|'
+        for i in range(self.space_length):
+            self.createLabel(self.canvas_row, i, string)  
 
 
 def save_family_tree_data_in_text_file():
