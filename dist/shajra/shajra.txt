@@ -16,3 +16,4 @@ Shoaib,Khurshid
 Junaid,Khurshid
 Awais,Khurshid
 Bashir,Deen
+Rehmat,Bashir
