@@ -1,6 +1,10 @@
 #   Shajra Application 
 import tkinter as tk
 
+WINDOW_SIZE = '1000x800'
+VERTICAL_SIZE = '400x800'
+HORIZONTAL_SIZE = '1000x400'
+
 class Node:
     def __init__(self, name, parent):
         self.__name = name 
@@ -26,16 +30,32 @@ class tree:
     space_length = 0
     desired_node = None
 
-    def __init__(self):
-        pass
-    
     def set_desired_node(self):
         self.desired_node = None
     
-    def createLabel(self, row, col, text_value):
-        label = tk.Label(self.window, text=text_value)
+    def createLabel(self, root, row, col, text_value):
+        label = tk.Label(root, text=text_value)
         label.grid(row=row, column=col)
     
+    def retrieve_input(self, textBox, parent_name):
+        inputValue=textBox.get("1.0","end-1c")
+        self.add_by_name(inputValue, parent_name)
+        save_family_tree_data_in_text_file()
+
+    def add_from_gui(self, parent_name):
+        root = tk.Tk()
+        root.geometry(HORIZONTAL_SIZE)
+        textBox=tk.Text(root, height=1, width=30)
+        textBox.pack()
+        buttonCommit=tk.Button(root, height=1, width=15, text="Add New Member", command=lambda: self.retrieve_input(textBox, parent_name))
+        buttonCommit.pack()
+
+    def createFrame(self, root, row, col, text_value):
+        button = tk.Button(root, text='\u2191', command=lambda : self.display_vertical(text_value)).pack(side=tk.LEFT)
+        label = tk.Button(root, text=text_value, command=lambda: self.add_from_gui(text_value)).pack(side=tk.LEFT)
+        button = tk.Button(root, text='\u2192', command=lambda : self.display_horizontal(text_value)).pack(side=tk.LEFT)
+        root.grid(row=row, column=col, padx=0)
+
     def add_by_name(self, name, parent_name):
         self.set_desired_node()
         self.search_desired_node(parent_name, ALPHA_NODE)
@@ -52,31 +72,35 @@ class tree:
     
     def display_vertical(self, name):
         self.window = tk.Tk()
-        self.window.geometry('400x600')
+        self.window.geometry(VERTICAL_SIZE)
         
         self.set_desired_node()
         self.search_desired_node(name, ALPHA_NODE)
         self.vertical_display(self.desired_node)
         
-        self.window.geometry('400x400')
         self.window.mainloop()
         
-    def vertical_display(self, node):    
+    def vertical_display(self, node): 
         if node is None:    
             return
         self.vertical_display(node.get_parent())
         # GUI Component
-        self.createLabel(self.canvas_row, 1, node.get_name())
-        self.createLabel(self.canvas_row + 1, 1, '  |  ')
+        self.createLabel(self.window, self.canvas_row, 1, node.get_name())
+        self.createLabel(self.window, self.canvas_row + 1, 1, '  |  ')
         self.canvas_row += 2
 
         print(node.get_name())
         print('  |  ')
 
     def display_horizontal(self, name):
+        self.window = tk.Tk()
+        self.window.geometry(HORIZONTAL_SIZE)
+
         self.set_desired_node()
         self.search_desired_node(name, ALPHA_NODE)
         self.horizontal_display(self.desired_node)
+
+        self.window.mainloop()
 
     def horizontal_display(self, node):
         if node.get_parent() is None:
@@ -84,27 +108,32 @@ class tree:
             return
         else:
             node = node.get_parent()
+            count = 0
             for child in node.get_child():
-                print (child.get_name(), ' | ', end="")
+                self.createLabel(self.window, self.canvas_row, count, child.get_name())
+                self.createLabel(self.window, self.canvas_row , count + 1, '  |  ')
+                count += 3
+                print(child.get_name(), ' | ', end="")
 
     def complete_traversal(self, name):
         self.window = tk.Tk()
-        self.window.geometry('400x600')
+        self.window.geometry(WINDOW_SIZE)
         
         self.set_desired_node()
         self.search_desired_node(name, ALPHA_NODE)
         self.traverse(self.desired_node)
-
+        
         self.window.mainloop()
 
     def traverse(self, node):
+        gridframe = tk.Frame(self.window)   
         if node is None:
             return
         else:
             if len(node.get_child()) == 0:
                 # GUI Component
                 self.format_gui_tree()
-                self.createLabel(self.canvas_row, self.space_length, node.get_name())
+                self.createFrame(gridframe, self.canvas_row, self.space_length, node.get_name())
                 self.canvas_row += 1
 
                 self.format_tree()
@@ -112,7 +141,7 @@ class tree:
             else:
                  # GUI Component
                 self.format_gui_tree()
-                self.createLabel(self.canvas_row, self.space_length, node.get_name())                
+                self.createFrame(gridframe, self.canvas_row, self.space_length, node.get_name())                
                 self.canvas_row += 1
 
                 self.format_tree()
@@ -142,7 +171,7 @@ class tree:
     def format_gui_tree(self):
         string = '|'
         for i in range(self.space_length):
-            self.createLabel(self.canvas_row, i, string)  
+            self.createLabel(self.window, self.canvas_row, i, string)  
 
 
 def save_family_tree_data_in_text_file():
@@ -187,28 +216,30 @@ def options():
     print('[5] Save Family Tree \n')
 
 def handle_user_input(T):
+    T.complete_traversal('Deen')
     options()
-    user_input = int(input('Enter Option Number: '))
+    # user_input = int(input('Enter Option Number: '))
     while True:
-        if user_input == 1:
-            name = input('\nEnter Member Name: ')
-            parent = input('\nEnter Parent Name: ')
-            T.add_by_name(name, parent)
-        elif user_input == 2:
-            name = input('\nEnter Member Name: ')
-            T.display_vertical(name)
-        elif user_input == 3:
-            name = input('\nEnter Member Name: ')
-            T.display_horizontal(name)
-        elif user_input == 4:
-            name = input('\nEnter Member Name: ')
-            T.complete_traversal(name)
-        elif user_input == 5:
-            save_family_tree_data_in_text_file()
-            print('\nSaved in TEXT File\n')
-        else:
-            options()
-        user_input = int(input('\nEnter Option Number: '))
+        T.complete_traversal('Deen')
+        # if user_input == 1:
+        #     name = input('\nEnter Member Name: ')
+        #     parent = input('\nEnter Parent Name: ')
+        #     T.add_by_name(name, parent)
+        # elif user_input == 2:
+        #     name = input('\nEnter Member Name: ')
+        #     T.display_vertical(name)
+        # elif user_input == 3:
+        #     name = input('\nEnter Member Name: ')
+        #     T.display_horizontal(name)
+        # elif user_input == 4:
+        #     name = input('\nEnter Member Name: ')
+        #     T.complete_traversal(name)
+        # elif user_input == 5:
+        #     save_family_tree_data_in_text_file()
+        #     print('\nSaved in TEXT File\n')
+        # else:
+        #     options()
+        # user_input = int(input('\nEnter Option Number: '))
         
 
 ALPHA_NODE = Node('Deen', None)
