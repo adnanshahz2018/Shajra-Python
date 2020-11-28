@@ -5,14 +5,17 @@ Rizwan,Ihsan
 Adnan,Ihsan
 Muaz,Adnan
 Anzil,Ihsan
+Noman,Ihsan
 Inam,Akbar
 Shahzeb,Inam
 Danial,Inam
 Ali,Inam
+Kainat,Inam
 Anwar,Akbar
 Jazib,Anwar
 Khurshid,Akbar
 Shoaib,Khurshid
+Ahmed,Shoaib
 Junaid,Khurshid
 Awais,Khurshid
 Bashir,Deen
