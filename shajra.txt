@@ -10,7 +10,6 @@ Inam,Akbar
 Shahzeb,Inam
 Danial,Inam
 Ali,Inam
-Kainat,Inam
 Anwar,Akbar
 Jazib,Anwar
 Khurshid,Akbar
